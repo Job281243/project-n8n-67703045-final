@@ -1,0 +1,238 @@
+{
+  "name": "API-googlesheets-Vue",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "data",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "03894733-7a2d-49f9-988c-95bde8a04047",
+      "name": "Webhook",
+      "webhookId": "dc086c7b-65f3-4caf-a9d3-f4076daf7256"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1FKoW_4IxPY7Vjban27BOwF4FMllluFCMu_l3fAJNmoE",
+          "mode": "list",
+          "cachedResultName": "equipment",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FKoW_4IxPY7Vjban27BOwF4FMllluFCMu_l3fAJNmoE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1670360257,
+          "mode": "list",
+          "cachedResultName": "request_equipment.",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FKoW_4IxPY7Vjban27BOwF4FMllluFCMu_l3fAJNmoE/edit#gid=1670360257"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "484746c4-226f-4924-95e1-1ec60ff80449",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "1tagugOjiBVFJ5yS",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0f6a0996-a732-4429-9d70-ad7c25fc8512",
+              "name": "tdate",
+              "value": "={{ $json['Timestamp'] }}",
+              "type": "string"
+            },
+            {
+              "id": "504548e9-a5d7-45e0-b232-b5d698e08ebe",
+              "name": "ชื่อ-นามสกุล",
+              "value": "={{ $json['ชื่อ-นามสกุล'] }}",
+              "type": "string"
+            },
+            {
+              "id": "b7cb7b45-4ae6-48a6-9064-6c5e6d8b66df",
+              "name": "แผนก",
+              "value": "={{ $json['แผนก'] }}",
+              "type": "string"
+            },
+            {
+              "id": "2bd1f10d-afb0-4dca-8f1e-017567551ac2",
+              "name": "รายชื่ออุปกรณ์",
+              "value": "={{ $json['รายชื่ออุปกรณ์'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a2891d92-bb18-4854-bddb-473e8386b16d",
+              "name": "จำนวนที่เบิก",
+              "value": "={{ $json['จำนวนที่เบิก'] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "e890e560-54fd-44f5-8d23-e0ad5a806c21",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        624,
+        0
+      ],
+      "id": "2bac6a5c-02a2-45d3-9ebe-6acc4870ceb1",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1FKoW_4IxPY7Vjban27BOwF4FMllluFCMu_l3fAJNmoE",
+          "mode": "list",
+          "cachedResultName": "equipment",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FKoW_4IxPY7Vjban27BOwF4FMllluFCMu_l3fAJNmoE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1670360257,
+          "mode": "list",
+          "cachedResultName": "request_equipment.",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FKoW_4IxPY7Vjban27BOwF4FMllluFCMu_l3fAJNmoE/edit#gid=1670360257"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -160
+      ],
+      "id": "4dc17e67-5acf-4e7c-b6b3-14b40b1c831a",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "OoHU8J8Wv2iVqCiw",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "job281243@gmail.com",
+        "subject": "📦 แจ้งเตือนการเบิกอุปกรณ์",
+        "emailType": "text",
+        "message": "=เวลา {{ $json.Timestamp }}\nชื่อนาม-สกุล {{ $json['ชื่อ-นามสกุล'] }}\nแผนก {{ $json['แผนก'] }}\nรายชื่ออุปกรณ์ {{ $json['รายชื่ออุปกรณ์'] }}\nจำนวน {{ $json['จำนวนที่เบิก'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        -160
+      ],
+      "id": "59da403d-41d9-4634-9f89-8fe6e2bf9907",
+      "name": "Send a message1",
+      "webhookId": "5961a7d0-de84-4d39-802d-549c4c0ad2dc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "W8HtdEI6QbMBg78S",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "d4a3b36c-325d-483b-97b3-4b4b0b305981",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2e31009a008d1b06183bd96affc6190f3b7ce2c9fda019e9b514e274221423fc"
+  },
+  "id": "ZB7s9v1IGlfz7rYK",
+  "tags": []
+}
